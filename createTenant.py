@@ -12,7 +12,7 @@ except ImportError:
     sys.exit("Error: please verify credentials file format.")
 
 tenantJson = '''
-{"displayName":"abc","name":"abc","description":"fred","siteAssociations":[{"siteId":"6081c2155fb41db238e1c69a","securityDomains":[],"cloudAccount":null,"azureAccount":null,"awsAccount":null,"gatewayRouter":null}],"userAssociations":[]}
+{"displayName":"abc","name":"abc","description":"fred","siteAssociations":[{"siteId":"6081c2155fb41db238e1c69a","securityDomains":[]}],"userAssociations":[]}
 '''
 
 rc = mso.RestClient(MSO_IP, MSO_ADMIN, MSO_PASSWORD, api_version="v1")
