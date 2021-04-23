@@ -1,0 +1,4 @@
+MSO_IP="192.168.10.160"
+MSO_ADMIN="admin"
+MSO_PASSWORD="ins3965!"
+
