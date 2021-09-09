@@ -349,6 +349,36 @@ staticPathBinding = '''
 }
 '''
 
+patchEpg = '''
+[
+    {
+        "op": "add",
+        "path": "/templates/testTemplate/anps/ap1/epgs/-",
+        "value": {
+                   "name": "epg_patch",
+                    "displayName": "Patched_EPG",
+                    "epgRef": {
+                                "schemaId": "613927591f0000080a98c007",
+                                "templateName": "testTemplate",
+                                "anpName": "ap1",
+                                "epgName": "epg_patch"
+                                },
+                    "bdRef": {
+                            "schemaId": "613927591f0000080a98c007",
+                            "templateName": "testTemplate",
+                            "bdName": "bd1"
+                        },
+                    "vrfRef": {
+                            "schemaId" : "613927591f0000080a98c007",
+                            "templateName": "testTemplate",
+                            "vrfName": "vrf1"
+                        },
+                    "selectors": [],
+                    "epgType": "application"       
+        }
+    }
+]
+'''
 
 print("Pushing blob")
 resp = rc.post('/schemas', json_body=json.loads(postData))
@@ -362,3 +392,25 @@ resp = rc.put('/schemas/613927591f0000080a98c007', json_body=json.loads(staticPa
 print("Deploy modified schema to site")
 resp = rc.get('/execute/schema/613927591f0000080a98c007/template/testTemplate')
 print(resp.text)
+print("Adding EPG via PATCH method")
+resp = rc.patch('/schemas/613927591f0000080a98c007', json_body=json.loads(patchEpg))
+print(resp.text)
+print("Deploy modified schema to site")
+resp = rc.get('/execute/schema/613927591f0000080a98c007/template/testTemplate')
+print(resp.text)
+
+staticPathPatch = '''
+[
+   {
+      "path": "/sites/6138cf80ca038ce79fe968e6-testTemplate/anps/ap1/epgs/epg1/staticPorts/0", 
+      "op": "remove"
+   }
+]
+'''
+
+x = input("About to remove static path binding using PATCH")
+resp = rc.patch('/schemas/613927591f0000080a98c007?validate=false', json_body=json.loads(staticPathPatch))
+resp = rc.get('/execute/schema/613927591f0000080a98c007/template/testTemplate')
+print(resp.text)
+
+
