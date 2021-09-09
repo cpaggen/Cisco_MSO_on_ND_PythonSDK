@@ -17,7 +17,7 @@ tenantJson = '''
  "name":"%s",
  "description":"%s",
  "siteAssociations":[
-   {"siteId":"6081c2155fb41db238e1c69a",
+   {"siteId":"6138cf80ca038ce79fe968e6",
     "securityDomains":[]
    }],
  "userAssociations":[]}
@@ -25,7 +25,7 @@ tenantJson = '''
 
 rc = mso.RestClient(MSO_IP, MSO_ADMIN, MSO_PASSWORD, api_version="v1")
 
-for i in range(100):
+for i in range(10):
     tenant = tenantJson % ("DemoB-"+str(i),"demoB-"+str(i),"API test "+str(i))
     resp = rc.post('/tenants', json_body=json.loads(tenant))
     allNodes = json.loads(resp.text)
@@ -33,7 +33,7 @@ for i in range(100):
     tenantId.append(allNodes['id'])
     
 print("Check the UI. I will now delete all tenants")
-temp = raw_input("continue? ")
+temp = input("continue? ")
 
 for i in range(len(tenantId)):
     delUrl = '/tenants/' + tenantId[i]
