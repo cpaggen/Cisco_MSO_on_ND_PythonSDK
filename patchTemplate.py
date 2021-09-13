@@ -3,7 +3,7 @@ import sys
 import mso
 import urllib3
 import json
-import pprint
+from pprint import pprint as pprint
 
 try:
     from credentials import MSO_IP, MSO_ADMIN, MSO_PASSWORD
@@ -12,11 +12,11 @@ except ImportError:
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-rc = mso.RestClient(MSO_IP, MSO_ADMIN, MSO_PASSWORD)
+rc = mso.RestClient(MSO_IP, MSO_ADMIN, MSO_PASSWORD, api_version="v1")
 templateName = 'testTemplate'
 schemaName = 'testSchema'
 
-# let's fetch the id of schema 'schema_one'
+# let's fetch the id of the schema 
 schemas = rc.get('/schemas')
 schemasJson = json.loads(schemas.text)
 for schema in schemasJson['schemas']:
@@ -55,8 +55,11 @@ for i in range(pathCount):
 
 url = '/schemas/' + schemaId
 resp = rc.patch(url, json_body=patchSet)
-print("\n")
-pprint.pprint(json.loads(resp.text))
+if resp.status_code == 204:
+   print("PATCH was succesful")
+else:
+   print("PATCH failed. You can still try the delete operation though.")
+   
 delOp = input(
     "Check MSO for new static path under EPG. Delete paths now? [Y/N]")
 if delOp == 'Y':
